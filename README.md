@@ -57,6 +57,6 @@ The EFFTW classes maintain the FFTW plan, which is deleted in the EFFTW class de
 
 ```c++
 // For clang, alias type deduction is not yet supported, so you will need to write:
-efftw::f2<decltype(mat)> fft(mat);
+efftw::f2<decltype(mat)> fft{mat};
 ```
 
