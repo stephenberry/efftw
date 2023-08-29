@@ -26,8 +26,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE efftw::efftw)
 
 ## Example
 
-## Example
-
 ```c++
 #include "efftw/efftw.hpp"
 
