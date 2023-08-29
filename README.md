@@ -35,10 +35,10 @@ int main()
 ```c++
 using namespace efftw;
 // classes
-f1{vec} // 1D forward FFT
+f1{vec} // 1D forward FFT (not normalized)
 f2{mat} // 2D forward FFT
-i1{vec} // 1D inverse FFT
-i2{mat} // 2D inverse FFT
+i1{vec} // 1D inverse FFT (1/(rows) normalization)
+i2{mat} // 2D inverse FFT (1/(rows * cols) normalization)
 
 // functions
 shift1(vec) // 1D forward FFT shift
