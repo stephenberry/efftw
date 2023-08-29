@@ -52,3 +52,11 @@ ishift2(mat) // 2D inverse FFT shift
 EFFTW classes take references to Eigen types. Do not delete the matrix or resize it without rebuilding the EFFTW class.
 
 The EFFTW classes maintain the FFTW plan, which is deleted in the EFFTW class destructors. The classes are used to keep the plan alive and allow the same matrix memory to be used multiple times. It is inefficient to rebuild the plan, but the plan needs to be rebuilt if the size of the matrix or vector changes.
+
+## Alias Type Deduction
+
+```c++
+// For clang, alias type deduction is not yet supported, so you will need to write:
+efftw::f2<decltype(mat)> fft(mat);
+```
+
