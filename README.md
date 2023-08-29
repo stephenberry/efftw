@@ -25,9 +25,8 @@ int main()
       }
    }
    
-   // compute the FFT of mat in place
-   efftw::f2 fft{mat};
-   fft();
+   efftw::f2 fft{mat}; // FFTW planning on construction (may be reused)
+   fft(); // compute the FFT of mat in place
 }
 ```
 
