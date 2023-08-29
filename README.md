@@ -2,15 +2,13 @@
 E-FFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
 - Supports 1D and 2D FFTs
-- Header only
+- Single header file: `#include "efftw/efftw.hpp"`
 
 ## Including
 
-FFTW and Eigen dependencies are not installed or linked by the included CMakeLists.txt
+Note: FFTW and Eigen dependencies are not installed or linked by the included CMakeLists.txt
 
-These libraries must be included and linked by the developer. E-FFTW is a single header file that you include via `#include "efftw/efftw.hpp"`
-
-You can use FetchContent with CMake to add E-FFTW to your project
+You can use CMake's FetchContent to add E-FFTW to your project
 
 ```cmake
 include(FetchContent)
