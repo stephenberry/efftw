@@ -8,7 +8,7 @@ EFFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for [
 
 FFTW and Eigen dependencies are not installed or linked by the included CMakeLists.txt
 
-These libraries must be included and linked as you desired. EFFTW is a single header file that you include via `#include "efftw/efftw.hpp"`
+These libraries must be included and linked by the developer. EFFTW is a single header file that you include via `#include "efftw/efftw.hpp"`
 
 You can use FetchContent with CMake to add `efftw`
 
