@@ -1,4 +1,4 @@
-# Eigen-FFTW (EFFTW)
+# Eigen-FFTW
 E-FFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
 - Supports 1D and 2D FFTs
