@@ -1,43 +1,29 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(eigen_fft
+include(cmake/prelude.cmake)
+
+project(efftw
     VERSION 0.0.1
     LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+include(cmake/project-is-top-level.cmake)
+include(cmake/variables.cmake)
 
-file(GLOB_RECURSE srcs src/*.cpp include/efftw/*.hpp)
+add_library(efftw_efftw INTERFACE)
+add_library(efftw::efftw ALIAS efftw_efftw)
 
-# Organize files into directories
-foreach(FILE ${srcs})
-   # Get the directory of the source file
-   get_filename_component(PARENT_DIR "${FILE}" PATH)
+set_property(TARGET efftw_efftw PROPERTY EXPORT_NAME efftw)
 
-   # Remove common directory prefix to make the group
-   string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
+target_compile_features(efftw_efftw INTERFACE cxx_std_20)
+target_include_directories(
+   efftw_efftw ${warning_guard}
+   INTERFACE "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+)
 
-if(MSVC)
-   # Make sure we are using windows slashes
-   string(REPLACE "/" "\\" GROUP "${GROUP}")
+if(NOT CMAKE_SKIP_INSTALL_RULES)
+  include(cmake/install-rules.cmake)
 endif()
 
-   # Group into "Source Files" and "Header Files"
-   if ("${FILE}" MATCHES ".*\\.cpp")
-      set(GROUP "Source Files${GROUP}")
-   elseif("${FILE}" MATCHES ".*\\.h")
-      set(GROUP "Header Files${GROUP}")
-   endif()
-
-   source_group("${GROUP}" FILES "${FILE}")
-endforeach()
-
-include_directories(include ../eigen "/opt/homebrew/Cellar/fftw/3.3.10_1/include")
-
-add_executable(${PROJECT_NAME} ${srcs})
-
-# Link the FFTW library to your project
-target_link_libraries(${PROJECT_NAME} "/opt/homebrew/Cellar/fftw/3.3.10_1/lib/libfftw3.a"
-"/opt/homebrew/Cellar/fftw/3.3.10_1/lib/libfftw3_threads.a"
-    m           # Link against math library
-    pthread     # Link against pthread library
-    )
+if (PROJECT_IS_TOP_LEVEL)
+  include(cmake/dev-mode.cmake)
+endif()
