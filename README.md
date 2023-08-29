@@ -1,5 +1,5 @@
 # Eigen-FFTW (EFFTW)
-EFFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
+E-FFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
 - Supports 1D and 2D FFTs
 - Header only
@@ -8,9 +8,9 @@ EFFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for [
 
 FFTW and Eigen dependencies are not installed or linked by the included CMakeLists.txt
 
-These libraries must be included and linked by the developer. EFFTW is a single header file that you include via `#include "efftw/efftw.hpp"`
+These libraries must be included and linked by the developer. E-FFTW is a single header file that you include via `#include "efftw/efftw.hpp"`
 
-You can use FetchContent with CMake to add `efftw`
+You can use FetchContent with CMake to add E-FFTW to your project
 
 ```cmake
 include(FetchContent)
@@ -74,9 +74,9 @@ ishift2(mat) // 2D inverse FFT shift
 
 ## Important!
 
-EFFTW classes take references to Eigen types. Do not delete the matrix or resize it without rebuilding the EFFTW class.
+E-FFTW classes take references to Eigen types. Do not delete the matrix or resize it without rebuilding the EFFTW class.
 
-The EFFTW classes maintain the FFTW plan, which is deleted in the EFFTW class destructors. The classes are used to keep the plan alive and allow the same matrix memory to be used multiple times. It is inefficient to rebuild the plan, but the plan needs to be rebuilt if the size of the matrix or vector changes.
+The E-FFTW classes maintain the FFTW plan, which is deleted in the E-FFTW class destructors. The classes are used to keep the plan alive and allow the same matrix memory to be used multiple times. It is inefficient to rebuild the plan, but the plan needs to be rebuilt if the size of the matrix or vector changes.
 
 ## Alias Type Deduction
 
