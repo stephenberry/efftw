@@ -48,7 +48,7 @@ namespace efftw
       backward = FFTW_BACKWARD
    };
    
-   template <class T, direction Direction>
+   template <is_vector T, direction Direction>
    struct gen1
    {
       Eigen::MatrixBase<T>& data;
