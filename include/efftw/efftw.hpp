@@ -41,69 +41,28 @@ namespace efftw
          return fftwf_plan_dft_2d(args...);
       }
    }
-
-   template <is_vector T>
-   struct f1 final
-   {
-      Eigen::MatrixBase<T>& data;
-      
-      f1(Eigen::MatrixBase<T>& data) : data(data) {}
-      ~f1() {
-         fftw_destroy_plan(plan);
-      }
-      
-      void operator()() {
-          fftw_execute(plan);
-      }
-      
-      using value_type = typename Eigen::MatrixBase<T>::Scalar;
-      
-   private:
-      fftw_plan plan = fftw_planner_1d<value_type>(int(data.rows()), int(data.cols()),
-                                                                  reinterpret_cast<fftw_complex*>(data.derived().data()), reinterpret_cast<fftw_complex*>(data.derived().data()),
-                                                                  FFTW_FORWARD, FFTW_ESTIMATE);
-   };
    
    enum class direction : int32_t
    {
       forward = FFTW_FORWARD,
       backward = FFTW_BACKWARD
    };
-
-   template <class T>
-   struct f2 final
-   {
-      Eigen::MatrixBase<T>& data;
-      
-      f2(Eigen::MatrixBase<T>& data) : data(data) {}
-      ~f2() {
-         fftw_destroy_plan(plan);
-      }
-      
-      void operator()() {
-          fftw_execute(plan);
-      }
-      
-      using value_type = typename Eigen::MatrixBase<T>::Scalar;
-      
-   private:
-      fftw_plan plan = fftw_planner_2d<value_type>(int(data.rows()), int(data.cols()),
-          reinterpret_cast<fftw_complex*>(data.derived().data()), reinterpret_cast<fftw_complex*>(data.derived().data()),
-          FFTW_FORWARD, FFTW_ESTIMATE);
-   };
    
-   template <is_vector T>
-   struct i1 final
+   template <class T, direction Direction>
+   struct gen1
    {
       Eigen::MatrixBase<T>& data;
       
-      i1(Eigen::MatrixBase<T>& data) : data(data) {}
-      ~i1() {
+      gen1(Eigen::MatrixBase<T>& data) : data(data) {}
+      ~gen1() {
          fftw_destroy_plan(plan);
       }
       
       void operator()() {
-          fftw_execute(plan);
+         fftw_execute(plan);
+         if constexpr (Direction == direction::backward) {
+            data /= double(data.rows()); // normalize
+         }
       }
       
       using value_type = typename Eigen::MatrixBase<T>::Scalar;
@@ -111,22 +70,24 @@ namespace efftw
    private:
       fftw_plan plan = fftw_planner_1d<value_type>(int(data.rows()), int(data.cols()),
                                                                   reinterpret_cast<fftw_complex*>(data.derived().data()), reinterpret_cast<fftw_complex*>(data.derived().data()),
-                                                   FFTW_BACKWARD, FFTW_ESTIMATE);
+                                                   int(Direction), FFTW_ESTIMATE);
    };
-
-   template <class T>
-   struct i2 final
+   
+   template <class T, direction Direction>
+   struct gen2
    {
       Eigen::MatrixBase<T>& data;
       
-      i2(Eigen::MatrixBase<T>& data) : data(data) {}
-      ~i2() {
+      gen2(Eigen::MatrixBase<T>& data) : data(data) {}
+      ~gen2() {
          fftw_destroy_plan(plan);
       }
       
       void operator()() {
-          fftw_execute(plan);
-         data /= double(data.rows()) * data.cols(); // normalize
+         fftw_execute(plan);
+         if constexpr (Direction == direction::backward) {
+            data /= double(data.rows()) * data.cols(); // normalize
+         }
       }
       
       using value_type = typename Eigen::MatrixBase<T>::Scalar;
@@ -134,8 +95,20 @@ namespace efftw
    private:
       fftw_plan plan = fftw_planner_2d<value_type>(int(data.rows()), int(data.cols()),
           reinterpret_cast<fftw_complex*>(data.derived().data()), reinterpret_cast<fftw_complex*>(data.derived().data()),
-          FFTW_BACKWARD, FFTW_ESTIMATE);
+          int(Direction), FFTW_ESTIMATE);
    };
+   
+   template <class T>
+   using f1 = gen1<T, direction::forward>;
+   
+   template <class T>
+   using i1 = gen1<T, direction::backward>;
+
+   template <class T>
+   using f2 = gen2<T, direction::forward>;
+   
+   template <class T>
+   using i2 = gen2<T, direction::backward>;
    
    template <is_vector T>
    inline void shift1(Eigen::MatrixBase<T>& data)

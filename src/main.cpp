@@ -22,7 +22,7 @@ int main() {
       }
    }
    
-   efftw::f2 fft{mat};
+   efftw::f2<decltype(mat)> fft(mat);
    
    auto t0 = std::chrono::steady_clock::now();
    fft();
