@@ -6,10 +6,6 @@ E-FFTW is a modern C++20 wrapper library around [FFTW](http://www.fftw.org) for 
 
 ## Including
 
-Note: FFTW and Eigen dependencies are not installed or linked by the included CMakeLists.txt
-
-You can use CMake's FetchContent to add E-FFTW to your project
-
 ```cmake
 include(FetchContent)
 
@@ -23,6 +19,8 @@ FetchContent_MakeAvailable(efftw)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE efftw::efftw)
 ```
+
+>  Note: FFTW and Eigen dependencies are not included or installed by linking to `efftw::efftw`
 
 ## Example
 
