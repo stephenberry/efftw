@@ -4,6 +4,7 @@
 
 #include <Eigen/Dense>
 #include <random>
+#include <stdexcept>
 
 namespace efftw
 {
@@ -110,7 +111,7 @@ namespace efftw
    inline void shift1(Eigen::MatrixBase<T>& data)
    {
       const auto size = data.size();
-      const auto shift = size / 2;
+      const auto shift = (size + 1) / 2; // +1 to handle odd sizes
       data.segment(0, shift).swap(data.segment(shift, size - shift));
    }
 
@@ -118,13 +119,16 @@ namespace efftw
    inline void inv_shift1(Eigen::MatrixBase<T>& data)
    {
       const auto size = data.size();
-      const auto shift = size / 2;
+      const auto shift = (size + 1) / 2; // +1 to handle odd sizes
       data.segment(0, shift).swap(data.segment(shift, size - shift));
    }
 
    template <class T>
    inline void shift2(Eigen::MatrixBase<T>& data)
    {
+      if (data.rows() % 2 != 0 || data.cols() % 2 != 0) {
+         throw std::runtime_error("efftw::shift2 requires even sized inputs");
+      }
       const auto shift_rows = data.rows() / 2;
       const auto shift_cols = data.cols() / 2;
       data.topLeftCorner(shift_rows, shift_cols).swap(data.bottomRightCorner(shift_rows, shift_cols));
@@ -134,6 +138,9 @@ namespace efftw
    template <class T>
    inline void inv_shift2(Eigen::MatrixBase<T>& data)
    {
+      if (data.rows() % 2 != 0 || data.cols() % 2 != 0) {
+         throw std::runtime_error("efftw::shift2 requires even sized inputs");
+      }
       const auto shift_rows = data.rows() / 2;
       const auto shift_cols = data.cols() / 2;
       data.bottomRightCorner(shift_rows, shift_cols).swap(data.topLeftCorner(shift_rows, shift_cols));
