@@ -19,7 +19,7 @@ namespace efftw
    concept is_vector = requires {
                           {
                              T::ColsAtCompileTime == 1
-                             } -> std::same_as<std::true_type>;
+                          };
                        };
 
    template <class ComplexType>
@@ -66,7 +66,7 @@ namespace efftw
 
      private:
       fftw_plan plan = fftw_planner_1d<value_type>(
-         int(data.rows()), int(data.cols()), reinterpret_cast<fftw_complex*>(data.derived().data()),
+         int(data.rows()), reinterpret_cast<fftw_complex*>(data.derived().data()),
          reinterpret_cast<fftw_complex*>(data.derived().data()), int(Direction), FFTW_ESTIMATE);
    };
 
