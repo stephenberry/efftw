@@ -64,8 +64,8 @@ i2{mat} // 2D inverse FFT (1/(rows * cols) normalization)
 // functions
 shift1(vec) // 1D forward FFT shift
 shift2(mat) // 2D forward FFT shift
-ishift1(vec) // 1D inverse FFT shift
-ishift2(mat) // 2D inverse FFT shift
+inv_shift1(vec) // 1D inverse FFT shift
+inv_shift2(mat) // 2D inverse FFT shift
 ```
 
 ## Important!
