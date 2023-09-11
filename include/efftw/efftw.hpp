@@ -52,23 +52,38 @@ namespace efftw
    {
       Eigen::MatrixBase<T>& data;
 
+      using value_type = typename Eigen::MatrixBase<T>::Scalar;
+      using fftw_complex_t = std::conditional_t<sizeof(value_type) == 16, fftw_complex, fftwf_complex>;
+      using fftw_plan_t = std::conditional_t<sizeof(value_type) == 16, fftw_plan, fftwf_plan>;
+
       gen1(Eigen::MatrixBase<T>& data) : data(data) {}
-      ~gen1() { fftw_destroy_plan(plan); }
+      ~gen1()
+      {
+         if constexpr (sizeof(value_type) == 16) {
+            fftw_destroy_plan(plan);
+         }
+         else {
+            fftwf_destroy_plan(plan);
+         }
+      }
 
       void operator()()
       {
-         fftw_execute(plan);
+         if constexpr (sizeof(value_type) == 16) {
+            fftw_execute(plan);
+         }
+         else {
+            fftwf_execute(plan);
+         }
          if constexpr (Direction == direction::backward) {
             data /= double(data.rows()); // normalize
          }
       }
 
-      using value_type = typename Eigen::MatrixBase<T>::Scalar;
-
      private:
-      fftw_plan plan = fftw_planner_1d<value_type>(
-         int(data.rows()), reinterpret_cast<fftw_complex*>(data.derived().data()),
-         reinterpret_cast<fftw_complex*>(data.derived().data()), int(Direction), FFTW_ESTIMATE);
+      fftw_plan_t plan = fftw_planner_1d<value_type>(
+         int(data.rows()), reinterpret_cast<fftw_complex_t*>(data.derived().data()),
+         reinterpret_cast<fftw_complex_t*>(data.derived().data()), int(Direction), FFTW_ESTIMATE);
    };
 
    template <class T, direction Direction>
@@ -76,23 +91,38 @@ namespace efftw
    {
       Eigen::MatrixBase<T>& data;
 
+      using value_type = typename Eigen::MatrixBase<T>::Scalar;
+      using fftw_complex_t = std::conditional_t<sizeof(value_type) == 16, fftw_complex, fftwf_complex>;
+      using fftw_plan_t = std::conditional_t<sizeof(value_type) == 16, fftw_plan, fftwf_plan>;
+
       gen2(Eigen::MatrixBase<T>& data) : data(data) {}
-      ~gen2() { fftw_destroy_plan(plan); }
+      ~gen2()
+      {
+         if constexpr (sizeof(value_type) == 16) {
+            fftw_destroy_plan(plan);
+         }
+         else {
+            fftwf_destroy_plan(plan);
+         }
+      }
 
       void operator()()
       {
-         fftw_execute(plan);
+         if constexpr (sizeof(value_type) == 16) {
+            fftw_execute(plan);
+         }
+         else {
+            fftwf_execute(plan);
+         }
          if constexpr (Direction == direction::backward) {
             data /= double(data.rows()) * data.cols(); // normalize
          }
       }
 
-      using value_type = typename Eigen::MatrixBase<T>::Scalar;
-
      private:
-      fftw_plan plan = fftw_planner_2d<value_type>(
-         int(data.rows()), int(data.cols()), reinterpret_cast<fftw_complex*>(data.derived().data()),
-         reinterpret_cast<fftw_complex*>(data.derived().data()), int(Direction), FFTW_ESTIMATE);
+      fftw_plan_t plan = fftw_planner_2d<value_type>(
+         int(data.rows()), int(data.cols()), reinterpret_cast<fftw_complex_t*>(data.derived().data()),
+         reinterpret_cast<fftw_complex_t*>(data.derived().data()), int(Direction), FFTW_ESTIMATE);
    };
 
    template <class T>
