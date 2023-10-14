@@ -57,6 +57,10 @@ namespace efftw
       using fftw_plan_t = std::conditional_t<sizeof(value_type) == 16, fftw_plan, fftwf_plan>;
 
       gen1(Eigen::MatrixBase<T>& data) : data(data) {}
+      gen1() = default;
+      gen1(const gen1&) = default;
+      gen1(gen1&&) = default;
+
       ~gen1()
       {
          if constexpr (sizeof(value_type) == 16) {
@@ -96,6 +100,10 @@ namespace efftw
       using fftw_plan_t = std::conditional_t<sizeof(value_type) == 16, fftw_plan, fftwf_plan>;
 
       gen2(Eigen::MatrixBase<T>& data) : data(data) {}
+      gen2() = default;
+      gen2(const gen2&) = default;
+      gen2(gen2&&) = default;
+
       ~gen2()
       {
          if constexpr (sizeof(value_type) == 16) {
