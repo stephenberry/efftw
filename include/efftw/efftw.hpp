@@ -1,6 +1,10 @@
 #pragma once
 
+#if __has_include(<fftw3.h>)
 #include <fftw3.h>
+#elif __has_include(<fftw/fftw3.h>)
+#include <fftw/fftw3.h>
+#endif
 
 #include <Eigen/Dense>
 #include <random>
