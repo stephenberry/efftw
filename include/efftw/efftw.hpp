@@ -153,16 +153,16 @@ namespace efftw
    inline void shift1(Eigen::MatrixBase<T>& data)
    {
       const auto size = data.size();
-      const auto shift = (size + 1) / 2; // +1 to handle odd sizes
-      data.segment(0, shift).swap(data.segment(shift, size - shift));
+      const auto shift = size / 2; // Size of sections to swap
+      data.head(shift).swap(data.tail(shift));
    }
 
    template <is_vector T>
    inline void inv_shift1(Eigen::MatrixBase<T>& data)
    {
       const auto size = data.size();
-      const auto shift = (size + 1) / 2; // +1 to handle odd sizes
-      data.segment(0, shift).swap(data.segment(shift, size - shift));
+      const auto shift = size / 2; // Size of sections to swap
+      data.head(shift).swap(data.tail(shift));
    }
 
    template <class T>
