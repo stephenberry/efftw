@@ -9,6 +9,7 @@
 #include <Eigen/Dense>
 #include <random>
 #include <stdexcept>
+#include <mutex>
 
 namespace efftw
 {
@@ -30,6 +31,8 @@ namespace efftw
    template <class ComplexType>
    inline auto fftw_planner_1d(auto&&... args)
    {
+      static std::mutex mtx{};
+      std::unique_lock lock{mtx};
       if constexpr (sizeof(ComplexType) == 16) {
          return fftw_plan_dft_1d(args...);
       }
@@ -41,6 +44,8 @@ namespace efftw
    template <class ComplexType>
    inline auto fftw_planner_2d(auto&&... args)
    {
+      static std::mutex mtx{};
+      std::unique_lock lock{mtx};
       if constexpr (sizeof(ComplexType) == 16) {
          return fftw_plan_dft_2d(args...);
       }
